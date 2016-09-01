@@ -12,6 +12,7 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -26,7 +27,11 @@ import logging
 import re
 
 import a10_horizon.dashboard.api.deviceinstances as a10api
+import workflows as a_workflows
+import workflows as p_workflows
+import forms as p_forms
 import tabs as p_tabs
+from openstack_dashboard.api import nova as nova_api
 
 
 LOG = logging.getLogger(__name__)
@@ -41,8 +46,7 @@ class IndexView(tabs.TabView):
     def post(self, request, *args, **kwargs):
         obj_ids = request.POST.getlist('object_ids')
         action = request.POST['action']
-
-        # m = re.search('.delete([a-z]+)', action).group(1)
+# m = re.search('.delete([a-z]+)', action).group(1)
         if obj_ids == []:
             obj_ids.append(re.search('([0-9a-z-]+)$', action).group(1))
 
@@ -59,3 +63,27 @@ class IndexView(tabs.TabView):
                 LOG.exception(ex)
 
         return self.get(request, *args, **kwargs)
+
+
+class MigrateDeviceView(forms.views.ModalFormView):
+     name = _("Migrate Device")
+     form_class = p_forms.MigrateDevice
+     template_name = "instances/migrate_device.html"
+     success_url = reverse_lazy("horizon:admin:a10deviceinstances:index")
+     submit_url = "horizon:admin:a10deviceinstances:migratedevice"
+
+     def get_context_data(self, **kwargs):
+         context = super(MigrateDeviceView, self).get_context_data(**kwargs)
+         context["nova_instance_id"] = self.kwargs["id"]
+         context["submit_url"] = reverse(self.submit_url, args=[self.kwargs["id"]])
+         return context
+
+     @memoized.memoized_method
+     def _get_object(self, *args, **kwargs):
+         #import pdb; pdb.set_trace()
+         #return {"nova_instance_id": self.kwargs["nova_instance_id"]}
+         pass
+
+     def get_initial(self):
+         return {"nova_instance_id": self.kwargs["id"]}
+

@@ -1,4 +1,4 @@
-# Copyright (C) 2014-2016, A10 Networks Inc. All rights reserved.
+# Copyright (C) 2015, A10 Networks Inc. All rights reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -12,15 +12,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import logging
-import uuid
+try:
+    import openstack_dashboard.api.keystone as keystone_api
+    import openstack_dashboard.api.nova as nova_api
+except ImportError:
+    pass
 
-from django.utils.translation import ugettext_lazy as _
+class HorizonOps(object):
 
-import horizon.forms as forms
-import horizon.tables as tables
-import horizon.workflows as workflows
+    def get_nova(self):
+        return nova_api
 
-from a10_horizon.dashboard.api import deviceinstances
-
-
+    def get_keystone(self):
+        return keystone_api

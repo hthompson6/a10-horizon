@@ -1,4 +1,4 @@
-# Copyright (C) 2016, A10 Networks Inc. All rights reserved.
+#    Copyright (C) 2016, A10 Networks Inc. All rights reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -22,7 +22,14 @@ import a10_horizon
 import views
 
 # app_name = "a10deviceinstances"
-urlpatterns = patterns("a10_horizon.dashboard.admin.a10networks.instances.views",
+urlpatterns = patterns("a10_horizon.dashboard.a10networks.a10deviceinstances.views",
     url(r'^$', views.IndexView.as_view(), name='index'),
+    # url(r'^migratedevice$',
+    #     views.MigrateDeviceView.as_view(),
+    #     name='migratedevice'),
+    url(r'^migratedevice/(?P<id>[^/]*)$',
+        views.MigrateDeviceView.as_view(),
+        name='migratedevice'),
+
     # url(r'^delete$', views.DeleteApplianceView.as_view(), name='deleteappliance')
 )

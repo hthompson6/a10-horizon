@@ -23,6 +23,8 @@ from horizon import tables
 
 import a10_horizon.dashboard.api.deviceinstances as a10api
 
+import workflows as a_workflows
+
 LOG = logging.getLogger(__name__)
 
 URL_PREFIX = "horizon:admin:a10instances:"
@@ -67,23 +69,54 @@ class TerminateDeviceInstanceAction(tables.DeleteAction):
 
 
 class MigrateDeviceInstanceAction(tables.LinkAction):
-    name = "migratedeviceinstance"
-    verbose_name = _("Migrate")
-    url = "horizon:project:a10appliances:addappliance"
+    name = "migratedevice"
+    verbose_name = _("Migrate Device")
     icon = "plus"
+    action_type = "danger"
     classes = ("ajax-modal",)
+
+    def get_link_url(self, datum):
+        return reverse_lazy("horizon:admin:a10deviceinstances:migratedevice", kwargs={"id": datum["nova_instance_id"]})
+
+def get_instance_detail(datum):
+    return reverse_lazy('horizon:project:instances:detail', args=[datum["nova_instance_id"]])
+
+
+def get_a10web_link(datum):
+    protocol = "https"
+    ip_address = datum.get("host")
+    port = datum.get("port")
+
+    return 'https://{0}'.format(ip_address)
+
+
+def get_compute_link(datum):
+    hyper_id = "{0}_{1}".format(datum["comp_id"], datum["comp_name"])
+    return reverse_lazy('horizon:admin:hypervisors:detail', kwargs={"hypervisor": hyper_id})
+
+
+def get_spec_summary(datum):
+    flavor = datum.get("flavor")
+    if flavor:
+        ram = flavor.ram
+        cpus = flavor.vcpus
+        return 'RAM: {0}   VCPUS: {1}'.format(ram, cpus)
 
 
 class DeviceInstanceAdminTable(tables.DataTable):
     id = tables.Column("id", verbose_name=_("ID"), hidden=True)
     name = tables.Column("name", verbose_name=_("Hostname"), hidden=False)
-    ip = tables.Column("host", verbose_name="Management IP")
-    # api_ver = tables.Column("api_version", verbose_name="API Version")
-    # nova_instance_id = tables.Column("nova_instance_id", hidden=False, link=get_instance_detail)
+    owner = tables.Column("owner", verbose_name=_("Owner"), hidden=False)
+    image = tables.Column("image", verbose_name=_("Image"), hidden=False)
+    ip_address = tables.Column("host", link=get_a10web_link, verbose_name=_("IP Address"), hidden=False,)
+    specs = tables.Column(get_spec_summary, verbose_name="Specs Summary")
+    comp_name = tables.Column("comp_name", link=get_compute_link, verbose_name=_("Compute Node"), hidden=False,)
+    nova_instance_id = tables.Column("nova_instance_id", verbose_name=_("Nova Instance ID"),
+                                     hidden=False, link=get_instance_detail)
 
     class Meta(object):
         name = "deviceinstanceadmintable"
         verbose_name = _("Device Instances")
         table_actions = (TerminateDeviceInstanceAction,)
-        row_actions = (TerminateDeviceInstanceAction,)
+        row_actions = (MigrateDeviceInstanceAction, TerminateDeviceInstanceAction,)
 
