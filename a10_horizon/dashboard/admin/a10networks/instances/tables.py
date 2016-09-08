@@ -23,8 +23,6 @@ from horizon import tables
 
 import a10_horizon.dashboard.api.deviceinstances as a10api
 
-import workflows as a_workflows
-
 LOG = logging.getLogger(__name__)
 
 URL_PREFIX = "horizon:admin:a10instances:"

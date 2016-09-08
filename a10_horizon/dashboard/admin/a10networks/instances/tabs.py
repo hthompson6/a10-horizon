@@ -20,6 +20,7 @@ from horizon import tabs
 import tables as p_tables
 import a10_horizon.dashboard.api.deviceinstances as a10api
 import helper
+from horizon_ops import HorizonOps
 
 class DeviceInstanceAdminTableTab(tabs.TableTab):
     table_classes = (p_tables.DeviceInstanceAdminTable,)
@@ -31,12 +32,10 @@ class DeviceInstanceAdminTableTab(tabs.TableTab):
     def get_deviceinstanceadmintable_data(self):
         result = []
         try:
+            horiz = HorizonOps()
             result = a10api.get_a10_device_instances(self.request)
-<<<<<<< HEAD
-            result = helper.get_result(self.request, result)
-=======
-            result = helper.add_device_info(self.request, result)
->>>>>>> Migration with testings
+            result = helper.patch(self.request, horiz.get_nova(), 
+                                  horiz.get_keystone(), result)
         except Exception:
             result = []
             exceptions.handle(self.tab_group.request,

@@ -27,11 +27,6 @@ import logging
 import re
 
 import a10_horizon.dashboard.api.deviceinstances as a10api
-<<<<<<< HEAD
-=======
-import workflows as a_workflows
->>>>>>> Migration with testings
-import workflows as p_workflows
 import forms as p_forms
 import tabs as p_tabs
 from openstack_dashboard.api import nova as nova_api
@@ -67,53 +62,6 @@ class IndexView(tabs.TabView):
 
         return self.get(request, *args, **kwargs)
 
-
-<<<<<<< HEAD
-#class MigrateDeviceView(workflows.WorkflowView):
-#    name = _("Create Scaling Policy")
-#    workflow_class = project_workflows.AddPolicyWorkflow
-#    success_url = reverse_lazy(URL_PREFIX + "index")
-
-class MigrateDeviceView(forms.ModalFormView):
-#    workflow_class = p_workflows.MigrateDevice
-    form_class = p_forms.MigrateDevice
-    template_name = 'instances/migrate_device.html'
-    success_url = reverse_lazy("horizon:admin:a10deviceinstances:index")
-    modal_id = "migrate_device_modal"
-    modal_header = _("Migrate Device")
-    submit_label = _("Migrate Device")
-    #submit_url = reverse_lazy("horizon:admin:a10deviceinstances:migratedevice")
-
-    @memoized.memoized_method
-    def _get_object(self):
-        LOG.info("HEY HERE IS THINGS")
-        LOG.info(self.kwargs)
-        id = self.kwargs["id"]
-        self.submit_url = reverse_lazy("horizon:admin:a10deviceinstances:migratedevice",
-                                           kwargs={"id": id})
-        if id:
-            try:
-                return nova_api.server_get(self.request, id)
-            except Exception as ex:
-                redirect="https://google.com"
-                msg = _("Unable to retrieve scaling action: %s") % ex
-                exceptions.handle(self.request, msg, redirect=redirect)    
-
-#        except Exception:
- #           exceptions.handle(self.request, _("Unable to retrieve device."))
-
-    def get_context_data(self, **kwargs):
-        context = super(MigrateDeviceView, self).get_context_data(**kwargs)
-        #nova_instance_id = self.kwargs["id"]
-        #context['instance_id'] = nova_instance_id
-        #context['instance'] = self.get_object()
-        # context['submit_url'] = reverse(self.submit_url, args=[instance_id])
-        return context
-
-    def get_initial(self):
-        rv = self._get_object()
-        return rv
-=======
 class MigrateDeviceView(forms.views.ModalFormView):
      name = _("Migrate Device")
      form_class = p_forms.MigrateDevice
@@ -129,11 +77,7 @@ class MigrateDeviceView(forms.views.ModalFormView):
 
      @memoized.memoized_method
      def _get_object(self, *args, **kwargs):
-         #import pdb; pdb.set_trace()
-         #return {"nova_instance_id": self.kwargs["nova_instance_id"]}
          pass
 
      def get_initial(self):
          return {"nova_instance_id": self.kwargs["id"]}
->>>>>>> Migration with testings
-
