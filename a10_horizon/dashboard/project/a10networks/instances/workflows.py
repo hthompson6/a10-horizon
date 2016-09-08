@@ -89,7 +89,6 @@ class AddDeviceInstanceWorkflow(workflows.Workflow):
         # Create the instance manager, giving it the context so it knows how to auth
         auth_url = instance_helpers.url_for(request)
         config = instance_helpers.default_config(request)
-
         try:
             context["image"] ='acos4.1.1'
             context["flavor"] = "vthunder.small"

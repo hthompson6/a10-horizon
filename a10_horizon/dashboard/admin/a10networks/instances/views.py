@@ -27,8 +27,6 @@ import logging
 import re
 
 import a10_horizon.dashboard.api.deviceinstances as a10api
-import workflows as a_workflows
-import workflows as p_workflows
 import forms as p_forms
 import tabs as p_tabs
 from openstack_dashboard.api import nova as nova_api

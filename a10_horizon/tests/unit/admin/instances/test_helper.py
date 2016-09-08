@@ -35,7 +35,7 @@ class TestAdminHelper(test_case.TestCase):
         self.nova_api = self.horiz.get_nova = mock.MagicMock()
         self.keystone_api = self.horiz.get_keystone = mock.MagicMock()
 
-     def tearDown(self):
+    def tearDown(self):
         self.a10_device = None
         self.a10_patched = None
         self.nova_server = None

@@ -68,12 +68,13 @@ def patch(request, nova_api, keystone_api, device_list=[]):
         setattr(instance, "image", server.image_name)
         setattr(instance, "owner", keystone_api.tenant_get(request, server.tenant_id).name)
         setattr(instance, "comp_name", server.host_server)
-        setattr(instance, "comp_id", get_hosts(request, server.host_server))
+        setattr(instance, "comp_id", get_hosts(request, nova_api, server.host_server))
         result_list.append(instance)
     return result_list
 
 def migrate(request, nova_api, id, host):
     try:
+        import pdb; pdb.set_trace()
         nova_api.server_live_migrate(request, id, host, block_migration=True)
         return True
     except Exception:
