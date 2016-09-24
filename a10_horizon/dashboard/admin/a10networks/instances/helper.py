@@ -74,7 +74,6 @@ def patch(request, nova_api, keystone_api, device_list=[]):
 
 def migrate(request, nova_api, id, host):
     try:
-        import pdb; pdb.set_trace()
         nova_api.server_live_migrate(request, id, host, block_migration=True)
         return True
     except Exception:
