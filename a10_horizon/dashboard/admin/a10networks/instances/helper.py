@@ -13,22 +13,6 @@
 #    under the License.
 
 import logging
-
-<<<<<<< HEAD
-import openstack_dashboard.api.keystone as keystone_api
-import openstack_dashboard.api.glance as glance_api
-import openstack_dashboard.api.nova as nova_api
-
-LOG = logging.getLogger(__name__)
-
-def get_result(request, results):
-    if len(results) > 0:
-        servers = nova_api.server_list(request) #get list of servers
-        server_ids = [x["nova_instance_id"] for x in results] #get list of nova id's from results
-#        LOG.info("SERVER_ID")
-#        LOG.info(servers)
-#        LOG.info(servers["servers"])
-=======
 LOG = logging.getLogger(__name__)
 
 from horizon_ops import HorizonOps
@@ -46,55 +30,6 @@ def get_hosts(request, nova_api, hostname=None):
     return host_list
 
 def patch(request, nova_api, keystone_api, device_list=[]):
-#    if len(results) > 0:
-#        servers = nova_api.server_list(request) #get list of servers
-#        server_ids = [x["nova_instance_id"] for x in results] #get list of nova id's from results
->>>>>>> Migration with testings
-#        instance_server_ids = []
-#        for x in servers["servers"]:
-#            if x["id"] in server_ids:
-#                instance_server_ids.append(x["id"])       
-<<<<<<< HEAD
-        #instance_servers = [nova_api.server_get(request, x) for x in instance_server_ids] # list of full server object dictionaries
-        #flavors = nova_api.flavor_list(request)
-        #server_flavors = [x["flavor"] for x in instance_servers] # should be a list of flavor dictionaries
-        #instance_flavors = [x for x in flavors["flavors"] if x["id"] in server_flavors]
-        #tenants= keystone_api.tenant_list(request)
-
-=======
-#        instance_servers = [nova_api.server_get(request, x) for x in instance_server_ids] # list of full server object dictionaries
-#        flavors = nova_api.flavor_list(request)
-#        server_flavors = [x["flavor"] for x in instance_servers] # should be a list of flavor dictionaries
-#        instance_flavors = [x for x in flavors["flavors"] if x["id"] in server_flavors]
-#        tenants= keystone_api.tenant_list(request)
-#
->>>>>>> Migration with testings
-#        for instance in results:
-#            for server in instance_servers:
-#                if instance["nova_instance_id"] == server["id"]:
-#                    for flavor in instance_flavors:
-#                        if server["flavor"]["id"] == flavor["id"]:
-#                            instance["flavor"] = flavor
-#
-#                    for tenant in tenants:
-#                        if server["tenant_id"] == tenant["id"]:
-#                            instance["owner"] = tenant["name"]
-#
-<<<<<<< HEAD
-#                    instance["image"] = glance_api.image_get(request, server["image"]["id"])
-#
-        return results
-
-def migrate(request, id, host):
-    nova_api.server_live_migrate(request, id, host)
-
-def get_hosts(request):
-    host_list = nova_api.host_list(request)
-    if host_list:
-       return host_list
-    return ["192.168.1.0"]
-=======
-                   # instance["image"] = glance_api.image_get(request, server["image"]["id"])
     result_list = []
     for instance in device_list:
         server = nova_api.server_get(request, instance["nova_instance_id"])
@@ -111,14 +46,11 @@ def get_hosts(request):
         result_list.append(instance)
     return result_list
 
-def migrate(request, nova_api, id, host):
+def migrate(request, nova_api, id):
     try:
-        import pdb; pdb.set_trace()
-        nova_api.server_live_migrate(request, id, host, block_migration=True)
+        nova_api.server_migrate(request, id)
         return True
     except Exception:
         LOG.exception("Failure to migrate.")
 
     return False
-
->>>>>>> Migration with testings
