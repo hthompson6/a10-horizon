@@ -54,3 +54,7 @@ def migrate(request, nova_api, id):
         LOG.exception("Failure to migrate.")
 
     return False
+<<<<<<< HEAD
+=======
+
+>>>>>>> f11c818225c1e911425020ec586f73e84bed43c0

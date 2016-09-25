@@ -24,18 +24,8 @@ import views
 # app_name = "a10deviceinstances"
 urlpatterns = patterns("a10_horizon.dashboard.a10networks.a10deviceinstances.views",
     url(r'^$', views.IndexView.as_view(), name='index'),
-<<<<<<< HEAD
-    url(r'^migratedevice/(?P<id>[^/]*)$',
-        views.MigrateDeviceView.as_view(),
-        name='migratedevice'),
-=======
-    # url(r'^migratedevice$',
-    #     views.MigrateDeviceView.as_view(),
-    #     name='migratedevice'),
     url(r'^migratedevice/(?P<id>[^/]*)$',
         views.MigrateDeviceView.as_view(),
         name='migratedevice'),
 
->>>>>>> Migration with testings
-    # url(r'^delete$', views.DeleteApplianceView.as_view(), name='deleteappliance')
 )

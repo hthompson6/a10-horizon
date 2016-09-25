@@ -7,7 +7,6 @@ from horizon import forms
 import helper
 from horizon_ops import HorizonOps
 
-
 def array_to_choices(choices=[]):
     return map(lambda x: (x, x), choices)
 

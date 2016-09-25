@@ -62,6 +62,7 @@ class IndexView(tabs.TabView):
 
         return self.get(request, *args, **kwargs)
 
+
 class MigrateDeviceView(forms.views.ModalFormView):
      name = _("Migrate Device")
      form_class = p_forms.MigrateDevice
