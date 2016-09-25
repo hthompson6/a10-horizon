@@ -32,7 +32,11 @@ class DeviceInstanceAdminTableTab(tabs.TableTab):
         result = []
         try:
             result = a10api.get_a10_device_instances(self.request)
+<<<<<<< HEAD
             result = helper.get_result(self.request, result)
+=======
+            result = helper.add_device_info(self.request, result)
+>>>>>>> Migration with testings
         except Exception:
             result = []
             exceptions.handle(self.tab_group.request,
@@ -46,7 +50,6 @@ class DeviceInstanceAdminTabs(tabs.TabGroup):
     sticky = False
     show_single_tab = True
     tabs = (DeviceInstanceAdminTableTab,)
-
 
 class DeviceInstanceTabView(tabs.TabView):
     tab_group_class = DeviceInstanceAdminTabs
