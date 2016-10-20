@@ -27,5 +27,4 @@ urlpatterns = patterns("a10_horizon.dashboard.a10networks.a10deviceinstances.vie
     url(r'^migratedevice/(?P<id>[^/]*)$',
         views.MigrateDeviceView.as_view(),
         name='migratedevice'),
-
 )

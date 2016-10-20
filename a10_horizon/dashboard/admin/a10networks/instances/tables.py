@@ -32,8 +32,6 @@ class TerminateDeviceInstanceAction(tables.DeleteAction):
     name = "terminatedeviceinstance"
     verbose_name = _("TTerminate Device Instance")
     icon = "minus"
-    # classes = ("ajax-modal", )
-    # policy_rules = ()
 
     @staticmethod
     def action_present(count):
@@ -56,7 +54,7 @@ class TerminateDeviceInstanceAction(tables.DeleteAction):
 
     def delete(self, request, obj_id):
         try:
-            a10api.delete_a10_appliance(request, obj_id)
+            a10api.delete_a10_device_instance(request, obj_id)
         except Exception as ex:
             msg = _("Failed to delete scaling policy")
             LOG.exception(ex)
@@ -64,7 +62,6 @@ class TerminateDeviceInstanceAction(tables.DeleteAction):
 
     def allowed(self, request, obj):
         return True
-
 
 
 class MigrateDeviceInstanceAction(tables.LinkAction):
